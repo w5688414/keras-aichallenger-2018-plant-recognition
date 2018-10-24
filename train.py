@@ -13,6 +13,10 @@ import tensorflow as tf
 from inception_resnet_v2 import InceptionResNetV2
 from mobilenet_v2 import MobileNetv2
 from resnet import ResNet50
+from inception_v4 import inception_v4
+from resnet34 import ResNet34
+from vgg19 import VGG19
+from densenet121 import DenseNet
 import os
 from xception import Xception
 from shufflenetv2 import ShuffleNetV2
@@ -39,10 +43,29 @@ with open("labels.txt","r") as f:
     for line in f.readlines():
         classes.append(line.strip("\n").split(" ")[0])
 
+def preprocess_input(x, dim_ordering='default'):
+    if dim_ordering == 'default':
+        dim_ordering = K.image_dim_ordering()
+    assert dim_ordering in {'tf', 'th'}
+
+    if dim_ordering == 'th':
+        x[:, 0, :, :] -= 103.939
+        x[:, 1, :, :] -= 116.779
+        x[:, 2, :, :] -= 123.68
+        # 'RGB'->'BGR'
+        x = x[:, ::-1, :, :]
+    else:
+        x[:, :, :, 0] -= 103.939
+        x[:, :, :, 1] -= 116.779
+        x[:, :, :, 2] -= 123.68
+        # 'RGB'->'BGR'
+        x = x[:, :, :, ::-1]
+    return x
+
 
 def train(model,model_name='vgg'):
-    train_datagen = ImageDataGenerator(1.0/255)
-    test_datagen = ImageDataGenerator(1.0/255)
+    train_datagen = ImageDataGenerator(1./255)
+    test_datagen = ImageDataGenerator(1./255)
     train_generator = train_datagen.flow_from_directory(
         train_data_dir,
         shuffle=True,
@@ -74,15 +97,15 @@ def train(model,model_name='vgg'):
                                     save_best_only=True,
                                     save_weights_only=False)
     reduce_learning_rate = ReduceLROnPlateau(monitor='val_loss', factor=0.1,
-                                         patience=5, verbose=1)
+                                         patience=4, verbose=1)
     callbacks = [model_checkpoint,reduce_learning_rate,tensorboard]
 
     model.compile(loss='categorical_crossentropy',
-        optimizer='rmsprop',
+        optimizer='adam',
         metrics=['accuracy'])
     model.fit_generator(train_generator,
         steps_per_epoch=nb_train_samples//batch_size,
-        nb_epoch=nb_epoch,
+        epochs=nb_epoch,
         callbacks=callbacks,
         validation_data=validation_generator,
         validation_steps=nb_validation_samples // batch_size
@@ -122,8 +145,16 @@ def train_factory(MODEL_NAME):
         model=Inception_v3.inception((img_width,img_height,3),classes=charset_size)
     elif(MODEL_NAME=='vgg16'):
         model=VGGNet.vgg(input_shape=(img_width,img_height,3),classes=charset_size)
+    elif(MODEL_NAME=='vgg19'):
+        model=VGG19.VGG19(input_shape=(img_width,img_height,3),classes=charset_size,weights='weights/vgg19_weights_tf_dim_ordering_tf_kernels.h5')
     elif(MODEL_NAME=='resnet'):
         model=ResNet50.resnet(input_shape=(img_width,img_height,3),classes=charset_size)
+    elif(MODEL_NAME=='inception_v4'):
+        model=inception_v4.inception_v4(input_shape=(img_width,img_height,3),classes=charset_size)
+    elif(MODEL_NAME=='resnet34'):
+        model=ResNet34.ResNet34(input_shape=(img_width,img_height,3),classes=charset_size)
+    elif(MODEL_NAME=='densenet'):
+        model=DenseNet.DenseNet(input_shape=(img_width,img_height,3),classes=charset_size)
 
 
     print(model.summary())

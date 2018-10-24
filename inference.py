@@ -5,13 +5,17 @@ from tqdm import tqdm
 import json
 
 
-img_width, img_height = 224, 224
+
 
 test_datagen = ImageDataGenerator(1.0/255)
-
-model=load_model('./trained_model/inception_resnet_v2/inception_resnet_v2.08-0.7746.hdf5')
+# img_width, img_height = 229, 229
+# model=load_model('./trained_model/inception_v4/inception_v4.30-0.8103.hdf5')
+img_width, img_height = 224, 224
+# model=load_model('./trained_model/inception_resnet_v2/inception_resnet_v2.15-0.8187.hdf5')
+from custom_layers import Scale
+model=load_model('./trained_model/densenet/densenet.17-0.8109.hdf5',custom_objects={'Scale':Scale})
 model.compile(loss='categorical_crossentropy',
-        optimizer='rmsprop',
+        optimizer='adam',
         metrics=['accuracy'])
 print(model.summary())
 
