@@ -4,7 +4,7 @@ from keras.applications.imagenet_utils import _obtain_input_shape
 from keras.engine.topology import get_source_inputs
 from keras.layers import Input, Conv2D, MaxPool2D, GlobalMaxPooling2D, GlobalAveragePooling2D
 from keras.layers import Activation, Dense,Lambda,BatchNormalization,Concatenate
-from depthwise_conv2d import DepthwiseConv2D
+from mobilenet_v2 import DepthwiseConv2D
 from keras.models import Model
 import keras.backend as K
 import os

@@ -3,6 +3,8 @@ from keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 from tqdm import tqdm
 import json
+from mobilenet_v2 import relu6
+from mobilenet_v2 import DepthwiseConv2D
 
 
 
@@ -10,17 +12,17 @@ import json
 test_datagen = ImageDataGenerator(1.0/255)
 # img_width, img_height = 229, 229
 # model=load_model('./trained_model/inception_v4/inception_v4.30-0.8103.hdf5')
-img_width, img_height = 224, 224
-# model=load_model('./trained_model/inception_resnet_v2/inception_resnet_v2.15-0.8187.hdf5')
-from custom_layers import Scale
-model=load_model('./trained_model/densenet/densenet.17-0.8109.hdf5',custom_objects={'Scale':Scale})
+img_width, img_height = 229, 229
+model=load_model('./trained_model/mobilenet_v2/mobilenet_v2.43-0.8674.hdf5',custom_objects={'relu6':relu6,'DepthwiseConv2D':DepthwiseConv2D})
+# from custom_layers import Scale
+# model=load_model('./trained_model/densenet/densenet.17-0.8109.hdf5',custom_objects={'Scale':Scale})
 model.compile(loss='categorical_crossentropy',
         optimizer='adam',
         metrics=['accuracy'])
 print(model.summary())
 
 generator=test_datagen.flow_from_directory(
-                         '/home/eric/data/ai_challenger_plant_train_20170904/AgriculturalDisease_testA',
+                         '/home/eric/data/plant/ai_challenger_pdr2018_testa_20181023/AgriculturalDisease_testA',
                          target_size=(img_width,img_height),
                          batch_size=1,
                          class_mode=None,
