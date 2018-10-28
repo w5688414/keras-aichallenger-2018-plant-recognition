@@ -71,7 +71,6 @@ def crop_generator(batches, crop_length):
 
 def train(model,model_name='vgg'):
     train_datagen = ImageDataGenerator(1./255,
-                              rotation_range=40,
                               width_shift_range=0.1,
                               height_shift_range=0.1,
                               shear_range=0.2,
@@ -115,7 +114,7 @@ def train(model,model_name='vgg'):
                                     monitor='val_acc',
                                     verbose=1,
                                     save_best_only=True,
-                                    save_weights_only=False)
+                                    save_weights_only=True)
     reduce_learning_rate = ReduceLROnPlateau(monitor='val_loss', factor=0.1,
                                          patience=4, verbose=1)
     callbacks = [model_checkpoint,reduce_learning_rate,tensorboard]
@@ -143,50 +142,14 @@ def train_factory(MODEL_NAME):
     config.gpu_options.allocator_type = 'BFC'
     config.gpu_options.allow_growth = True
     set_session(tf.Session(config=config)) 
-    # model = CCR(input_shape=(img_width,img_height,1),classes=charset_size)
-    # model = LeNet.build(width=img_width, height=img_height, depth=1, classes=charset_size)
-    # model = ResNet.build_model(SHAPE=(img_width,img_height,1), classes=charset_size)
-
-    # vgg net 5
-    # MODEL_PATH='trained_model/vggnet5.hdf5'
-    # model=VGGNet5.vgg(input_shape=(img_width,img_height,1),classes=charset_size)
 
     model=None
-    if(MODEL_NAME=='inception_resnet_v2'):
-        model=InceptionResNetV2.inception_resnet_v2(input_shape=(img_width,img_height,3),classes=charset_size,weights='./trained_model/inception_resnet_v2/inception_resnet_v2.15-0.8187.hdf5')
-    elif(MODEL_NAME=='xception'):
-        # xeception
-        model=Xception.Xception((img_width,img_height,3),classes=charset_size)
-    elif(MODEL_NAME=='mobilenet_v2'):
-        #mobilenet v2
-        model=MobileNetv2.MobileNet_v2((img_width,img_height,3),classes=charset_size)
-    elif(MODEL_NAME=='inception_v3'):
-        #mobilenet v2
-        model=Inception_v3.inception((img_width,img_height,3),classes=charset_size)
-    elif(MODEL_NAME=='vgg16'):
-        model=VGGNet.vgg(input_shape=(img_width,img_height,3),classes=charset_size)
-    elif(MODEL_NAME=='vgg19'):
-        model=VGG19.VGG19(input_shape=(img_width,img_height,3),classes=charset_size,weights='weights/vgg19_weights_tf_dim_ordering_tf_kernels.h5')
-    elif(MODEL_NAME=='resnet'):
-        model=ResNet50.resnet(input_shape=(img_width,img_height,3),classes=charset_size)
-    elif(MODEL_NAME=='inception_v4'):
-        model=inception_v4.inception_v4(input_shape=(img_width,img_height,3),classes=charset_size)
-    elif(MODEL_NAME=='resnet34'):
-        model=ResNet34.ResNet34(input_shape=(img_width,img_height,3),classes=charset_size)
-    elif(MODEL_NAME=='densenet'):
-        model=DenseNet.DenseNet(input_shape=(img_width,img_height,3),classes=charset_size)
-    elif(MODEL_NAME=='shufflenet_v2'):
-        model=ShuffleNetV2.ShuffleNetV2(input_shape=(img_width,img_height,3),classes=charset_size)
-    elif(MODEL_NAME=='resnet_attention_56'):
+    if(MODEL_NAME=='resnet_attention_56'):
         model=Resnet_Attention_56.Resnet_Attention_56(input_shape=(img_width,img_height,3),classes=charset_size)
-
-
 
     print(model.summary())
     train(model,MODEL_NAME)
 
-    # MODEL_NAME='ShuffleNetV2'
-    # model=ShuffleNetV2.ShuffleNetV2((img_width,img_height,3),classes=charset_size)
 
 def make_args():
     parser = argparse.ArgumentParser()
@@ -198,49 +161,3 @@ if __name__ == '__main__':
     args = make_args()
     train_factory(args.model_name)
     
-# input_tensor = Input(shape=(img_width, img_height, 1))
-# base_model = ResNet50(include_top=False,input_tensor=input_tensor,weights=None)
-# # add a global spatial average pooling layer
-# x = base_model.output
-# # and a logistic layer -- let's say we have 100 classes
-# predictions = Dense(100, activation='softmax')(x)
-# # this is the model we will train
-# model = Model(inputs=input_tensor, outputs=predictions)
-# for layer in base_model.layers:
-#     layer.trainable = False
-# model=resnet50_100(feat_dims=1000,out_dims=100)
-
-
-# model = load_model("./model.h5")
-
-
-
-# model.save("./model.h5")
-
-# import os
-# from tqdm import tqdm
-# import json
-# import cv2
-# import numpy as np
-# from keras.preprocessing.image import img_to_array
-
-# test_dir='/home/eric/data/ai_challenger_plant_train_20170904/AgriculturalDisease_testA/images'
-# # test_dir='/home/eric/data/ai_challenger_plant_train_20170904/AgriculturalDisease_validationset/images'
-# test_images = os.listdir(test_dir)
-
-# result = []
-# for test_image in tqdm(test_images):
-#     temp_dict = {}
-#     img = cv2.resize(cv2.imread(os.path.join(test_dir,test_image)), (img_width, img_height)).astype(np.float32)
-#     img /= 255.0
-#     image = img_to_array(img)
-#     image = np.expand_dims(image, axis=0)
-#     predictions=model.predict(image)
-#     sorted_arr=np.argsort(predictions)
-#     temp_dict['image_id'] = test_image
-#     temp_dict['disease_class'] = int(sorted_arr[:,-1][0])
-#     result.append(temp_dict)
-
-# with open('submit.json', 'w') as f:
-#     json.dump(result, f)
-#     print('write result json, num is %d' % len(result))

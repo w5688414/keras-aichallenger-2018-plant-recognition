@@ -9,6 +9,7 @@ from keras.layers import Conv2D
 from keras.layers import MaxPooling2D
 from keras.layers import GlobalMaxPooling2D
 from keras.layers import GlobalAveragePooling2D
+from keras.layers import BatchNormalization
 from keras.preprocessing import image
 import os
 
@@ -49,10 +50,11 @@ class VGG19():
         x = Conv2D(512, (3, 3), activation='relu', padding='same', name='block5_conv4')(x)
         x = MaxPooling2D((2, 2), strides=(2, 2), name='block5_pool')(x)
 
+
         # Classification block
         x = Flatten(name='flatten')(x)
-        x = Dense(4096, activation='relu', name='fc1')(x)
-        x = Dense(4096, activation='relu', name='fc2')(x)
+        x = Dense(1024, activation='relu', name='fc1')(x)
+        x = Dense(1024, activation='relu', name='fc2')(x)
         x = Dense(classes, activation='softmax', name='pred')(x)
 
         model = Model(img_input, x, name='vgg19')

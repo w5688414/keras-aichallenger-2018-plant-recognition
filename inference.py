@@ -5,24 +5,38 @@ from tqdm import tqdm
 import json
 from mobilenet_v2 import relu6
 from mobilenet_v2 import DepthwiseConv2D
+from keras.layers import Lambda
+import tensorflow as tf
+import keras.backend as K
+from shufflenetv2 import ShuffleNetV2
+from resnet_attention_56 import Resnet_Attention_56
 
 
 
-
+test_dir='/home/eric/data/plant/ai_challenger_pdr2018_testa_20181023/AgriculturalDisease_testA'
 test_datagen = ImageDataGenerator(1.0/255)
+# img_width, img_height = 265, 265
+# model=load_model('./trained_model/resnet50/resnet50.27-0.8720.hdf5')
+# model=load_model('./trained_model/inception_v4/inception_v4.41-0.8670.hdf5')
 # img_width, img_height = 229, 229
-# model=load_model('./trained_model/inception_v4/inception_v4.30-0.8103.hdf5')
-img_width, img_height = 229, 229
-model=load_model('./trained_model/mobilenet_v2/mobilenet_v2.43-0.8674.hdf5',custom_objects={'relu6':relu6,'DepthwiseConv2D':DepthwiseConv2D})
+# model=load_model('./trained_model/mobilenet_v2/mobilenet_v2.43-0.8674.hdf5',custom_objects={'relu6':relu6,'DepthwiseConv2D':DepthwiseConv2D})
 # from custom_layers import Scale
 # model=load_model('./trained_model/densenet/densenet.17-0.8109.hdf5',custom_objects={'Scale':Scale})
+#img_width, img_height = 229, 229
+charset_size=61
+# model=ShuffleNetV2.ShuffleNetV2(input_shape=(img_width,img_height,3),classes=charset_size,weights='./trained_model/shufflenet_v2/shufflenet_v2.26-0.8676.hdf5')
+# model=load_model('./trained_model/shufflenet_v2/shufflenet_v2.26-0.8676.hdf5',custom_objects={'DepthwiseConv2D':DepthwiseConv2D,'Lambda':Lambda})
+img_width, img_height = 224, 224
+model=Resnet_Attention_56.Resnet_Attention_56(input_shape=(img_width,img_height,3),classes=charset_size,weights='./trained_model/resnet_attention_56/resnet_attention_56.49-0.8762.hdf5')
+# img_width, img_height = 224, 224
+# model=load_model('./trained_model/inception_v3/inception_v3.43-0.8747.hdf5')
 model.compile(loss='categorical_crossentropy',
         optimizer='adam',
         metrics=['accuracy'])
 print(model.summary())
 
 generator=test_datagen.flow_from_directory(
-                         '/home/eric/data/plant/ai_challenger_pdr2018_testa_20181023/AgriculturalDisease_testA',
+                         test_dir,
                          target_size=(img_width,img_height),
                          batch_size=1,
                          class_mode=None,
@@ -44,7 +58,7 @@ for i in tqdm(range(len(filenames))):
     result.append(temp_dict)
 #     break
 #     print('image %s is %d' % (test_image, sorted_arr[:,-1][0]))
-
-with open('submit.json', 'w') as f:
+json_name='submit.json'
+with open(json_name, 'w') as f:
     json.dump(result, f)
-    print('write result json, num is %d' % len(result)) 
+    print('write %s, num is %d' % (json_name,len(result)))
