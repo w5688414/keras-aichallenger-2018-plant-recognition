@@ -21,6 +21,10 @@ import os
 from xception import Xception
 from shufflenetv2 import ShuffleNetV2
 from resnet_attention_56 import Resnet_Attention_56
+from se_resnet import SEResNet50
+from squeezenet import SqueezeNet
+from se_resnext import SEResNext
+from densenet161 import DenseNet161
 from keras.applications import imagenet_utils
 from keras.callbacks import TensorBoard
 import time
@@ -72,8 +76,8 @@ def crop_generator(batches, crop_length):
 def train(model,model_name='vgg'):
     train_datagen = ImageDataGenerator(1./255,
                               rotation_range=40,
-                              width_shift_range=0.1,
-                              height_shift_range=0.1,
+                              width_shift_range=0.2,
+                              height_shift_range=0.2,
                               shear_range=0.2,
                               zoom_range=0.2,)
     test_datagen = ImageDataGenerator(1./255)
@@ -173,12 +177,20 @@ def train_factory(MODEL_NAME):
         model=inception_v4.inception_v4(input_shape=(img_width,img_height,3),classes=charset_size)
     elif(MODEL_NAME=='resnet34'):
         model=ResNet34.ResNet34(input_shape=(img_width,img_height,3),classes=charset_size)
-    elif(MODEL_NAME=='densenet'):
+    elif(MODEL_NAME=='densenet121'):
+        model=DenseNet.DenseNet(input_shape=(img_width,img_height,3),classes=charset_size)
+    elif(MODEL_NAME=='densenet161'):
         model=DenseNet.DenseNet(input_shape=(img_width,img_height,3),classes=charset_size)
     elif(MODEL_NAME=='shufflenet_v2'):
         model=ShuffleNetV2.ShuffleNetV2(input_shape=(img_width,img_height,3),classes=charset_size)
     elif(MODEL_NAME=='resnet_attention_56'):
         model=Resnet_Attention_56.Resnet_Attention_56(input_shape=(img_width,img_height,3),classes=charset_size)
+    elif(MODEL_NAME=='squeezenet'):
+        model=SqueezeNet.SqueezeNet(input_shape=(img_width,img_height,3),classes=charset_size)
+    elif(MODEL_NAME=='seresnet50'):
+        model=SEResNet50.SEResNet50(input_shape=(img_width,img_height,3),classes=charset_size)
+    elif(MODEL_NAME=='se_resnext'):
+        model=SEResNext.SEResNext(input_shape=(img_width,img_height,3),classes=charset_size)
 
 
 

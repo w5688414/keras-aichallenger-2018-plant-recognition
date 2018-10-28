@@ -20,6 +20,7 @@ from densenet121 import DenseNet
 import os
 from xception import Xception
 from shufflenetv2 import ShuffleNetV2
+from se_resnext import SEResNext
 from resnet_attention_56 import Resnet_Attention_56
 from keras.applications import imagenet_utils
 from keras.callbacks import TensorBoard
@@ -71,8 +72,9 @@ def crop_generator(batches, crop_length):
 
 def train(model,model_name='vgg'):
     train_datagen = ImageDataGenerator(1./255,
-                              width_shift_range=0.1,
-                              height_shift_range=0.1,
+                              rotation_range=40,
+                              width_shift_range=0.2,
+                              height_shift_range=0.2,
                               shear_range=0.2,
                               zoom_range=0.2,)
     test_datagen = ImageDataGenerator(1./255)
@@ -146,6 +148,8 @@ def train_factory(MODEL_NAME):
     model=None
     if(MODEL_NAME=='resnet_attention_56'):
         model=Resnet_Attention_56.Resnet_Attention_56(input_shape=(img_width,img_height,3),classes=charset_size)
+    elif(MODEL_NAME=='se_resnext'):
+        model=SEResNext.SEResNext(input_shape=(img_width,img_height,3),classes=charset_size)
 
     print(model.summary())
     train(model,MODEL_NAME)
