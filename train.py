@@ -37,16 +37,16 @@ test_data_dir = '/home/eric/data/plant/ai_challenger_pdr2018_validationset_20181
 class_dictionary={}
 
 # dimensions of our images.
-IMAGE_SIZE=(256,256)
+IMAGE_SIZE=(400,400)
 
-CROP_LENGTH=224
+CROP_LENGTH=360
 charset_size = 61
 nb_validation_samples = 4540
 nb_train_samples = 31718
 nb_epoch = 50
 batch_size = 16
 
-img_width, img_height = 224, 224
+img_width, img_height = CROP_LENGTH,CROP_LENGTH
 
 classes=[]
 with open("labels.txt","r") as f:
@@ -171,7 +171,7 @@ def train_factory(MODEL_NAME):
         model=VGGNet.vgg(input_shape=(img_width,img_height,3),classes=charset_size)
     elif(MODEL_NAME=='vgg19'):
         model=VGG19.VGG19(input_shape=(img_width,img_height,3),classes=charset_size,weights='weights/vgg19_weights_tf_dim_ordering_tf_kernels.h5')
-    elif(MODEL_NAME=='resnet'):
+    elif(MODEL_NAME=='resnet50'):
         model=ResNet50.resnet(input_shape=(img_width,img_height,3),classes=charset_size)
     elif(MODEL_NAME=='inception_v4'):
         model=inception_v4.inception_v4(input_shape=(img_width,img_height,3),classes=charset_size)

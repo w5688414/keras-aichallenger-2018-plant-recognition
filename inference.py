@@ -20,8 +20,8 @@ test_datagen = ImageDataGenerator(1.0/255)
 # model=load_model('./trained_model/inception_v4/inception_v4.41-0.8670.hdf5')
 # img_width, img_height = 229, 229
 # model=load_model('./trained_model/mobilenet_v2/mobilenet_v2.43-0.8674.hdf5',custom_objects={'relu6':relu6,'DepthwiseConv2D':DepthwiseConv2D})
-# from custom_layers import Scale
-# model=load_model('./trained_model/densenet/densenet.17-0.8109.hdf5',custom_objects={'Scale':Scale})
+from custom_layers import Scale
+model=load_model('./trained_model/densenet161/densenet161.42-0.8800.hdf5',custom_objects={'Scale':Scale})
 #img_width, img_height = 229, 229
 # charset_size=61
 # model=ShuffleNetV2.ShuffleNetV2(input_shape=(img_width,img_height,3),classes=charset_size,weights='./trained_model/shufflenet_v2/shufflenet_v2.26-0.8676.hdf5')
@@ -32,7 +32,7 @@ img_width, img_height = 224, 224
 # model=load_model('./trained_model/inception_v3/inception_v3.43-0.8747.hdf5')
 
 # model=load_model('./trained_model/squeezenet/squeezenet.33-0.8026.hdf5')
-model=load_model('./trained_model/seresnet50/seresnet50.43-0.8795.hdf5')
+# model=load_model('./trained_model/seresnet50/seresnet50.43-0.8795.hdf5')
 model.compile(loss='categorical_crossentropy',
         optimizer='adam',
         metrics=['accuracy'])

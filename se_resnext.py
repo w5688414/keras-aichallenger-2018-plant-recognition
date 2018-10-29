@@ -21,7 +21,7 @@ class SEResNext():
                 ResNeXt-101 can be defined as [3, 4, 23, 3].
                 Defaults is ResNeXt-50.
         '''
-        depth=[3, 4, 23, 3]
+        depth=[3, 4, 6, 3]
         cardinality=32
         width=4
         weight_decay=5e-4
