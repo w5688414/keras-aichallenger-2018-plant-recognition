@@ -15,6 +15,29 @@ h5py                               2.7.1
 ubuntu 16.04
 gtx 1080ti
 ```
+
+# models 
+- inception_resnet_v2   0.8764
+- xception              0.8740
+- mobilenet_v2          0.8674
+- inception_v3          0.8747
+- vgg16                 failed
+- vgg19                 failed
+- resnet50              0.8762
+- inception_v4          0.8700
+- resnet34              0.8773 
+- densenet121           didn't try
+- densenet161           0.8800
+- shufflenet_v2         0.8676
+- resnet_attention_56   0.8762
+- squeezenet            0.8026
+- seresnet50            0.8826
+- se_resnext            didn't try
+- nasnet                failed
+- custom                didn't try
+- resnet18              0.8754
+
+
 # tutorial
 
 ## datasets
