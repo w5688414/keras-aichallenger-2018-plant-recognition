@@ -1,5 +1,10 @@
 # keras-aichallenger-2018-plant-recognition
 
+# thoughts
+
+I have tried out various kinds of models, and use data argumentation operations, but when I reach to 0.87993 precision, I can't improve it anymore, but according to other competitors' experience, pytorch deep learning framework can get a higher percision, since I have tried out many keras models, I decide
+to make my code open source, any questions, contact me, please
+
 # environments
 
 ```
@@ -46,3 +51,6 @@ please refer to the
 - densenet161+inception_resnet_v2+seresnet50+resnet50+resnet34: 0.0.8817
 
 - 我这里就当做baseline开源了
+
+## contact
+any questions, please email me, my email address is: w5688414@outlook.com
