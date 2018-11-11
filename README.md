@@ -30,7 +30,7 @@ I provide various kinds of models for training, if you want to use one of these 
 python train.py --model_name=resnet34
 ```
 ## inference
-before you use the following command, you should manually add one line code to load your trained model, for example:
+before you use the following command, you should manually add one line code in the reference.py,  to load your trained model, for example:
 
 model=load_model('./trained_model/resnet34/resnet34.54-0.8773.hdf5')
 
@@ -39,8 +39,8 @@ python inference.py
 ```
 ## results combinations
 please refer to the 
-> create_csv_results.py
-> csv_combinations.py
+- create_csv_results.py
+- csv_combinations.py
 
 ## grade 
 - densenet161+inception_resnet_v2+seresnet50+resnet50+resnet34: 0.0.8817
