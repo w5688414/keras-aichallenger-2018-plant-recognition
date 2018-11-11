@@ -13,11 +13,11 @@ for indexs in df.index:
 
 file_dir='results/inception_resnet_v2_submit.csv'
 df=pd.read_csv(file_dir)
-inception_v3_data={}
+inception_resnet_v2_data={}
 for indexs in df.index:
     filename=df.loc[indexs].values[0]
     predictions=df.loc[indexs].values[1:]
-    inception_v3_data[filename]=predictions
+    inception_resnet_v2_data[filename]=predictions
 
 file_dir='results/seresnet50_submit.csv'
 df=pd.read_csv(file_dir)
@@ -58,7 +58,7 @@ for k,v in seresnet50_data.items():
 #     print(v)
     temp_dict = {}
     x1=densenet161_data[k]
-    x2=inception_v3_data[k]
+    x2=inception_resnet_v2_data[k]
     x3=seresnet50_data[k]
     x4=resnet34_data[k]
     # x5=resnet50_data[k]
