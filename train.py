@@ -25,26 +25,30 @@ from se_resnet import SEResNet50
 from squeezenet import SqueezeNet
 from se_resnext import SEResNext
 from densenet161 import DenseNet161
+from custom_network import Custom_Network
+from nasnet import NASNet
 from keras.applications import imagenet_utils
 from keras.callbacks import TensorBoard
 import time
 import argparse
 import numpy as np
+from resnet18 import ResnetBuilder
 
 
 train_data_dir = '/home/eric/data/plant/ai_challenger_pdr2018_trainingset_20181023/AgriculturalDisease_trainingset/data'
 test_data_dir = '/home/eric/data/plant/ai_challenger_pdr2018_validationset_20181023/AgriculturalDisease_validationset/data'
+# test_data_dir='/home/eric/Documents/AI_Challenger_2018/Baselines/plant_disease_recognition2018_baseline/keras/data'
 class_dictionary={}
 
 # dimensions of our images.
-IMAGE_SIZE=(400,400)
+IMAGE_SIZE=(265,265)
 
-CROP_LENGTH=360
+CROP_LENGTH=224
 charset_size = 61
 nb_validation_samples = 4540
 nb_train_samples = 31718
-nb_epoch = 50
-batch_size = 16
+nb_epoch = 300
+batch_size = 64
 
 img_width, img_height = CROP_LENGTH,CROP_LENGTH
 
@@ -75,9 +79,10 @@ def crop_generator(batches, crop_length):
 
 def train(model,model_name='vgg'):
     train_datagen = ImageDataGenerator(1./255,
+                              horizontal_flip=True,
                               rotation_range=40,
-                              width_shift_range=0.2,
-                              height_shift_range=0.2,
+                              width_shift_range=0.1,
+                              height_shift_range=0.1,
                               shear_range=0.2,
                               zoom_range=0.2,)
     test_datagen = ImageDataGenerator(1./255)
@@ -121,7 +126,7 @@ def train(model,model_name='vgg'):
                                     save_best_only=True,
                                     save_weights_only=False)
     reduce_learning_rate = ReduceLROnPlateau(monitor='val_loss', factor=0.1,
-                                         patience=4, verbose=1)
+                                         patience=10, verbose=1)
     callbacks = [model_checkpoint,reduce_learning_rate,tensorboard]
 
     model.compile(loss='categorical_crossentropy',
@@ -157,7 +162,7 @@ def train_factory(MODEL_NAME):
 
     model=None
     if(MODEL_NAME=='inception_resnet_v2'):
-        model=InceptionResNetV2.inception_resnet_v2(input_shape=(img_width,img_height,3),classes=charset_size,weights='./trained_model/inception_resnet_v2/inception_resnet_v2.15-0.8187.hdf5')
+        model=InceptionResNetV2.inception_resnet_v2(input_shape=(img_width,img_height,3),classes=charset_size,weights='./trained_model/inception_resnet_v2/inception_resnet_v2.12-0.8244.hdf5')
     elif(MODEL_NAME=='xception'):
         # xeception
         model=Xception.Xception((img_width,img_height,3),classes=charset_size)
@@ -191,6 +196,12 @@ def train_factory(MODEL_NAME):
         model=SEResNet50.SEResNet50(input_shape=(img_width,img_height,3),classes=charset_size)
     elif(MODEL_NAME=='se_resnext'):
         model=SEResNext.SEResNext(input_shape=(img_width,img_height,3),classes=charset_size)
+    elif(MODEL_NAME=='nasnet'):
+        model=NASNet.NASNetLarge(input_shape=(img_width,img_height,3),classes=charset_size)
+    elif(MODEL_NAME=='custom'):
+        model=Custom_Network.Custom_Network(input_shape=(img_width,img_height,3),classes=charset_size)
+    elif(MODEL_NAME=='resnet18'):
+        model=ResnetBuilder.build_resnet_18(input_shape=(img_width,img_height,3),num_outputs=charset_size)
 
 
 
