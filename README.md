@@ -16,7 +16,7 @@ ubuntu 16.04
 gtx 1080ti
 ```
 
-# models 
+# models and validation accuracy
 - inception_resnet_v2   0.8764
 - xception              0.8740
 - mobilenet_v2          0.8674
@@ -71,7 +71,7 @@ please refer to the
 - csv_combinations.py
 
 ## grade 
-- densenet161+inception_resnet_v2+seresnet50+resnet50+resnet34: 0.0.8817
+- densenet161+inception_resnet_v2+seresnet50+resnet50+resnet34: 0.8817
 
 - 我这里就当做baseline开源了
 
