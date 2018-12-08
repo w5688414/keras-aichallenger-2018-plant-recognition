@@ -48,9 +48,10 @@ https://challenger.ai/competition/pdr2018
 
 since the official download is not available, I make the datasets public, download websites (baidu cloud):
 
-site: https://pan.baidu.com/s/1394Oo3HrfGWyVZMAKT4QFA 
 
-extraction code: qnhu 
+url: https://pan.baidu.com/s/15csF8MyJaROQo5Hgt8sLYg
+
+extraction code: 16yc 
 
 2. for dataset generation, please refer to data_split.ipynb
 
