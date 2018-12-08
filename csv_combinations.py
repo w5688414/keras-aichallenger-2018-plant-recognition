@@ -60,8 +60,8 @@ for k,v in seresnet50_data.items():
     x1=densenet161_data[k]
     x2=inception_resnet_v2_data[k]
     x3=seresnet50_data[k]
-    x4=resnet34_data[k]
-    # x5=resnet50_data[k]
+    # x4=resnet34_data[k]
+    x4=resnet50_data[k]
     # x6=xception_data[k]
 
     x8=np.add(x1,x2)

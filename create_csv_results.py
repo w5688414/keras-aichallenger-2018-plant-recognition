@@ -1,9 +1,9 @@
 from keras.models import Model, load_model
 from custom_layers import Scale
 
-img_width, img_height = 224, 224
-# model=load_model('./trained_model/resnet50/resnet50.36-0.8762.hdf5')
-model=load_model('./trained_model/xception/xception.38-0.8740.hdf5')
+img_width, img_height = 360, 360
+model=load_model('./trained_model/resnet50/resnet50.36-0.8762.hdf5')
+# model=load_model('./trained_model/xception/xception.38-0.8740.hdf5')
 # model=load_model('./trained_model/seresnet50/seresnet50.43-0.8795.hdf5')
 # model=load_model('./trained_model/densenet161/densenet161.42-0.8800.hdf5',custom_objects={'Scale':Scale})
 # model=load_model('./trained_model/inception_v3/inception_v3.43-0.8747.hdf5')
@@ -17,7 +17,7 @@ print(model.summary())
 from keras.preprocessing.image import ImageDataGenerator
 
 test_datagen = ImageDataGenerator(1.0/255)
-test_dir='/home/eric/data/plant/ai_challenger_pdr2018_testa_20181023/AgriculturalDisease_testA'
+test_dir='/home/eric/data/plant/AgriculturalDisease_testB/'
 
 classes=[]
 with open("labels.txt","r") as f:
