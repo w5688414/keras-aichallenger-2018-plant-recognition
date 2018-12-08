@@ -46,8 +46,10 @@ gtx 1080ti
 
 https://challenger.ai/competition/pdr2018
 
-since the official download is not available, I make the datasets public, this si the download websites (baidu cloud):
+since the official download is not available, I make the datasets public, download websites (baidu cloud):
+
 site: https://pan.baidu.com/s/1394Oo3HrfGWyVZMAKT4QFA 
+
 extraction code: qnhu 
 
 2. for dataset generation, please refer to data_split.ipynb
