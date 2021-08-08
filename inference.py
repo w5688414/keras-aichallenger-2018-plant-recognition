@@ -41,11 +41,12 @@ model.compile(loss='categorical_crossentropy',
         optimizer='adam',
         metrics=['accuracy'])
 print(model.summary())
-
+nb_validation_samples = 4514
+batch_size=32
 generator=test_datagen.flow_from_directory(
                          test_dir,
                          target_size=(img_width,img_height),
-                         batch_size=1,
+                         batch_size=batch_size,
                          class_mode=None,
                          shuffle=False,
                          seed=42
@@ -53,8 +54,9 @@ generator=test_datagen.flow_from_directory(
 
 generator.reset()
 
-pred=model.predict_generator(generator,steps=2,verbose=1)
+pred=model.predict_generator(generator,steps=nb_validation_samples // batch_size+1,verbose=1)
 predicted_class_indices=np.argmax(pred,axis=1)
+print(predicted_class_indices)
 
 filenames=generator.filenames
 result = []
